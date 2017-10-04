@@ -57,11 +57,37 @@ bot.get(
 //   }
 // });
 
-bot.get("statuses/home_timeline", { count: 5 }, function(err, data, response) {
+function getBotTimeline() {
+  bot.get("statuses/home_timeline", { count: 5 }, function(err, data, response) {
+    if (err) {
+      console.error("Error\n", err);
+    } else {
+      data.forEach(function(d) {
+        console.log(d.text);
+        console.log(d.user.screen_name);
+        console.log(d.id_str);
+        console.log("\n");
+      });
+      //console.log(data);
+      //console.log(data.next_cursor);
+    }
+  });
+}
+
+getBotTimeline();
+
+bot.post("statuses/retweet/:id", { id: '' }, function(err, data, response) {
   if (err) {
-    console.error('Error\n', err);
+    console.error(err);
   } else {
-    console.log(data);
-    //console.log(data.next_cursor);
+    console.log(`${data.text} was retweeted`);
+  }
+});
+
+bot.post("statuses/unretweet/:id", { id: '' }, function(err, data, response) {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(`${data.text} was retweeted`);
   }
 });
