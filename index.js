@@ -1,8 +1,19 @@
 var Twit = require("twit");
-var request = require("request");
 var fs = require("fs");
+var csvParse = require("csv-parse");
+var rita = require('rita');
+var inputText = "I went to the car. The car went over the grocery store. Ben went bowling behind the grocery store and went off a cliff.";
 
 require("dotenv").config();
+
+
+var markov = new rita.RiMarkov(3);
+markov.loadText(inputText);
+var sentences = markov.generateSentences(1);
+
+console.log(sentences);
+console.log(markov.getProbability('went'));
+console.log(markov.getProbabilities('went'));
 
 var bot = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -74,4 +85,4 @@ function postStatus(params){
 }
 
 
-getNasaPhoto();
+// getNasaPhoto();

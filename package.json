@@ -9,7 +9,9 @@
   "author": "John Michelin <john@javascriptjohn.com> (http://www.javascriptjohn.com/)",
   "license": "MIT",
   "dependencies": {
+    "csv-parse": "1.2.4",
     "dotenv": "4.0.0",
+    "rita": "1.2.12",
     "twit": "2.2.9"
   }
 }
