@@ -5,6 +5,10 @@ var vision = require("@google-cloud/vision")({
   projectId: "johnbot-182518",
   keyFilename: "./private/keyfile.json"
 });
+var Canvas = require('canvas');
+
+console.log(vision);
+
 require("dotenv").config();
 
 var bot = new Twit({
@@ -55,17 +59,65 @@ function detectFaces(inputFile, callback) {
 }
 
 var inputFile = "photo1507730364223.jpg";
-
 detectFaces(inputFile, function(err, faces) {
   if (err) {
     console.error(err);
   }
   console.log("detectFaces response, ", faces);
+  highlightFaces(inputFile, faces, 'face.png', Canvas, function(err){
+    if(err){
+      console.error(err);
+    }
+  })
 });
 
+function highlightFaces (inputFile, faces, outputFile, Canvas, callback) {
+  fs.readFile(inputFile, (err, image) => {
+    if (err) {
+      return callback(err);
+    }
 
+    var Image = Canvas.Image;
+    // Open the original image into a canvas
+    var img = new Image();
+    img.src = image;
+    var canvas = new Canvas(img.width, img.height);
+    var context = canvas.getContext('2d');
+    context.drawImage(img, 0, 0, img.width, img.height);
 
+    // Now draw boxes around all the faces
+    context.strokeStyle = 'rgba(0,255,0,0.8)';
+    context.lineWidth = '5';
 
+    faces.forEach((face) => {
+      context.beginPath();
+      let origX = 0;
+      let origY = 0;
+      face.boundingPoly.vertices.forEach((bounds, i) => {
+        if (i === 0) {
+          origX = bounds.x;
+          origY = bounds.y;
+        }
+        context.lineTo(bounds.x, bounds.y);
+      });
+      context.lineTo(origX, origY);
+      context.stroke();
+    });
+
+    // Write the result to a file
+    console.log('Writing to file ' + outputFile);
+    var writeStream = fs.createWriteStream(outputFile);
+    var pngStream = canvas.pngStream();
+
+    pngStream.on('data', (chunk) => {
+      writeStream.write(chunk);
+    });
+    pngStream.on('error', console.log);
+    pngStream.on('end', callback);
+  });
+}
+
+/*
 var stream = bot.stream("statuses/filter", { track: "@journey4john" });
 
 stream.on("connecting", function(response) {
@@ -86,3 +138,4 @@ stream.on("tweet", function(tweet) {
     downloadPhoto(tweet.entities.media[0].media_url, tweet.user.screen_name, tweet.id_str);
   }
 });
+*/
