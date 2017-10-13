@@ -29,24 +29,6 @@ function downloadPhoto(url, replyToName, tweetId) {
   });
 }
 
-
-/*
-https://vision.googleapis.com/$discovery/rest?version=v1
-
-
-    joyLikelihood: 'LIKELY',
-    sorrowLikelihood: 'VERY_UNLIKELY',
-    angerLikelihood: 'VERY_UNLIKELY',
-    surpriseLikelihood: 'VERY_UNLIKELY',
-            "UNKNOWN",
-            "VERY_UNLIKELY",
-            "UNLIKELY",
-            "POSSIBLE",
-            "LIKELY",
-            "VERY_LIKELY"
-
- */
-
 function analyzePhoto(filename, replyToName, tweetId) {
   var request = {source: { filename: filename}};
   vision.faceDetection(request, function(err, faces) {
@@ -62,7 +44,6 @@ function analyzePhoto(filename, replyToName, tweetId) {
     postStatus(allEmotions, replyToName, tweetId);
   });
 }
-analyzePhoto('photo1507730364223.jpg', 'journey4John', 'blah');
 
 function extractFaceEmotions(face){
   var emotions = ['joyLikelihood', 'sorrowLikelihood', 'angerLikelihood', 'surpriseLikelihood'];
@@ -74,21 +55,20 @@ function extractFaceEmotions(face){
 
 function postStatus(allEmotions, replyToName, tweetId){
   var status = formatStatus(allEmotions, replyToName)
-  // bot.post(
-  //   "statuses/update",
-  //   {
-  //     status: status,
-  //     in_reply_to_status_id: tweetId
-  //   },
-  //   function (err, data, response) {
-  //     if (err) {
-  //       console.error(err);
-  //     } else {
-  //       console.log(`Bot has tweeted ${status}`);
-  //     }
-  //   }
-  // );
-  console.log(status);
+  bot.post(
+    "statuses/update",
+    {
+      status: status,
+      in_reply_to_status_id: tweetId
+    },
+    function (err, data, response) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(`Bot has tweeted ${status}`);
+      }
+    }
+  );
 }
 
 function formatStatus(allEmotions, replyToName){
@@ -113,7 +93,6 @@ function formatStatus(allEmotions, replyToName){
   status = `${status}!`
   return status
 }
-
 
 var stream = bot.stream("statuses/filter", { track: "@journey4john" });
 
