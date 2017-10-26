@@ -37,7 +37,7 @@ var grammar = tracery.createGrammar({
     '[job:backend dev][actions:relished his regex,wrote a node module]',
     '[job:scrum master][actions:burned down a chart,played poker]'
   ],
-  'story': ['#protagonist# the #job# went to the #place# every day. Usually #they# #actions#. Then #they# picked up #their# #object#.'],
+  'story': ['#protagonist# the #job# went to the #place# every day. Usually #they# #actions#. And finally #they# picked up #their# #object#.'],
   'origin': ['#[#setPronouns#][#setJob#][protagonist:#character#]story#']
 });
 // #object.a# adds a or an
