@@ -11,12 +11,34 @@ var bot = new Twit({
   timeout_ms: 60 * 1000
 });
 
+// var grammar = tracery.createGrammar({
+//   'character': ['Jango Fett', 'Sebulba', 'Adi Gallia'],
+//   'place': ['Tund', 'the Scimitar', 'Jakku', 'the flight deck', 'Tashi Station', 'Slave 1'],
+//   'object': ['DL-44', 'protocol droid', 'light saber'],
+//   'setJob': [
+//     '[job:bounty hunter][actions: blasted a hole, narrowly escaped, betrayed]',
+//     '[job:junker][actions: cheat, lie, skim off the top, barter with]',
+//     '[job:imperial officer][actions: halt, asks for papers, misses badly with blaster]'
+//   ],
+//   'story': ['#protagonist# the #job# went to the space dock every day. Usually they #actions#.'],
+//   'origin': ['#[#setJob][protagonist:#character#][story#']
+// });
 var grammar = tracery.createGrammar({
-  'character': ['Finis Valorum', 'Bail Prestor Organa', 'Jango Fett', 'Sebulba', 'Adi Gallia'],
-  'action': ['force push', 'jetpack', 'charge', 'blast'],
-  'place': ['Tund', 'the Scimitar', 'Jakku', 'the flight deck', 'Tashi Station', 'Slave 1'],
-  'object': ['DL-44', 'protocol droid', 'light saber'],
-  'origin': ['#character.capitalize# #action.ed# #character.capitalize# on #place# to get some #object.s#.']
+  'character': ['Karl', 'Aida', 'Hans'],
+  'place': ['cafe', 'WeWork', 'stand up desk'],
+  'object': ['laptop', 'coffee', 'dry erase marker'],
+  'setPronouns': [
+    '[they:they][them:them][their:their][theirs:theirs]',
+    '[they:she][them:her][their:her][theirs:hers]',
+    '[they:he][them:him][their:his][theirs:his]'
+  ],
+  'setJob': [
+    '[job:frontend dev][actions:fiddled with css,wrote a react component]',
+    '[job:backend dev][actions:relished his regex,wrote a node module]',
+    '[job:scrum master][actions:burned down a chart,played poker]'
+  ],
+  'story': ['#protagonist# the #job# went to the #place# every day. Usually #they# #actions#. Then #they# picked up #their# #object#.'],
+  'origin': ['#[#setPronouns#][#setJob#][protagonist:#character#]story#']
 });
 // #object.a# adds a or an
 // #object.s# pluralizes
@@ -25,4 +47,16 @@ grammar.addModifiers(tracery.baseEngModifiers);
 
 var story = grammar.flatten('#origin#');
 
-console.log(story);
+console.log('The Story\n', story);
+
+// bot.post(
+//   "statuses/update",
+//   {status: story},
+//   function (err, data, response) {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       console.log(`${data} has been tweeted.`);
+//     }
+//   }
+// );
