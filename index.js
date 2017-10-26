@@ -17,12 +17,31 @@ var  spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1mXw73cif2QLvELWTf
 
 var spreadsheetUrlBroken = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-b9W2Yv6QdYT5sPlISZ2e2Ris-0XOZd8quemPavO-g0dEVNEz344Oe2SnN0rT6yGC1uuI1Jk9VIMo/pubhtml';
 
-console.log(spreadsheetUrlBroken.match(/[\\/][d][\\/][e][\\/]/g));
+//console.log(spreadsheetUrlBroken.match(/[\\/][d][\\/][e][\\/]/g));
 
 Tabletop.init({
   key: spreadsheetUrl,
   callback: function(data, tabletop){
-    console.log(data);
+    data.forEach(function(row){
+      var status = `${row.URL} is a useful resource for ${row.Subject}`;
+      var allowPost = false;
+      console.log(status);
+      if(allowPost === true) {
+        bot.post(
+          "statuses/update",
+          {
+            status:status
+          },
+          function (err, data, response) {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log(`${data}`);
+            }
+          }
+        );
+      }
+    });
   },
   simpleSheet: true
 });
