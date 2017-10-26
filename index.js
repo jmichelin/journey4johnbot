@@ -1,5 +1,5 @@
 var Twit = require("twit");
-var tracery = require('tracery-grammar');
+var Tabletop = require("tabletop");
 
 require("dotenv").config();
 
@@ -11,52 +11,18 @@ var bot = new Twit({
   timeout_ms: 60 * 1000
 });
 
-// var grammar = tracery.createGrammar({
-//   'character': ['Jango Fett', 'Sebulba', 'Adi Gallia'],
-//   'place': ['Tund', 'the Scimitar', 'Jakku', 'the flight deck', 'Tashi Station', 'Slave 1'],
-//   'object': ['DL-44', 'protocol droid', 'light saber'],
-//   'setJob': [
-//     '[job:bounty hunter][actions: blasted a hole, narrowly escaped, betrayed]',
-//     '[job:junker][actions: cheat, lie, skim off the top, barter with]',
-//     '[job:imperial officer][actions: halt, asks for papers, misses badly with blaster]'
-//   ],
-//   'story': ['#protagonist# the #job# went to the space dock every day. Usually they #actions#.'],
-//   'origin': ['#[#setJob][protagonist:#character#][story#']
-// });
-var grammar = tracery.createGrammar({
-  'character': ['Karl', 'Aida', 'Hans'],
-  'place': ['cafe', 'WeWork', 'stand up desk'],
-  'object': ['laptop', 'coffee', 'dry erase marker'],
-  'setPronouns': [
-    '[they:they][them:them][their:their][theirs:theirs]',
-    '[they:she][them:her][their:her][theirs:hers]',
-    '[they:he][them:him][their:his][theirs:his]'
-  ],
-  'setJob': [
-    '[job:frontend dev][actions:fiddled with css,wrote a react component]',
-    '[job:backend dev][actions:relished his regex,wrote a node module]',
-    '[job:scrum master][actions:burned down a chart,played poker]'
-  ],
-  'story': ['#protagonist# the #job# went to the #place# every day. Usually #they# #actions#. Then #they# picked up #their# #object#.'],
-  'origin': ['#[#setPronouns#][#setJob#][protagonist:#character#]story#']
+//var spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1jiG2gtEbYcltAkR84nYGMZbuC09Aysef4nJyJfjR7VU/pubhtml';
+var  spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1mXw73cif2QLvELWTfFJL_0rMgnmwpywGgZzOW1Denbk/edit?usp=sharing';
+
+
+var spreadsheetUrlBroken = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-b9W2Yv6QdYT5sPlISZ2e2Ris-0XOZd8quemPavO-g0dEVNEz344Oe2SnN0rT6yGC1uuI1Jk9VIMo/pubhtml';
+
+console.log(spreadsheetUrlBroken.match(/[\\/][d][\\/][e][\\/]/g));
+
+Tabletop.init({
+  key: spreadsheetUrl,
+  callback: function(data, tabletop){
+    console.log(data);
+  },
+  simpleSheet: true
 });
-// #object.a# adds a or an
-// #object.s# pluralizes
-
-grammar.addModifiers(tracery.baseEngModifiers);
-
-var story = grammar.flatten('#origin#');
-
-console.log('The Story\n', story);
-
-// bot.post(
-//   "statuses/update",
-//   {status: story},
-//   function (err, data, response) {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       console.log(`${data} has been tweeted.`);
-//     }
-//   }
-// );
