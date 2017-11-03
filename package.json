@@ -1,7 +1,7 @@
 {
-  "name": "twitterbot",
+  "name": "journey4johnbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "twitter bot examples",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,10 +9,13 @@
   "author": "John Michelin <john@javascriptjohn.com> (http://www.javascriptjohn.com/)",
   "license": "MIT",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "1.0.13",
     "@google-cloud/vision": "0.12.0",
     "canvas": "1.6.7",
     "csv-parse": "1.2.4",
     "dotenv": "4.0.0",
+    "fluent-ffmpeg": "2.1.2",
+    "jsmidgen": "0.1.5",
     "rita": "1.2.12",
     "tabletop": "1.5.2",
     "tracery-grammar": "2.7.3",
