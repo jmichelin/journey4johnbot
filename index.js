@@ -64,7 +64,7 @@ function createMidiFile(tweet, midiFileName, cb) {
   var file = new midi.File();
   var track = new midi.Track();
   file.addTrack(track);
-  var cleanedText = rita.RiTa.tokenize(tweet.text);
+  var cleanedText = rita.RiTa.tokenize(cleanText(tweet.text)).filter(isNotPunctuation).join(" ");
   var taggedTweet = getPartsOfSpeech(cleanedText);
   compose(taggedTweet, track);
   fs.writeFile(midiFileName, file.toBytes(), { encoding: "binary" }, cb);
@@ -115,7 +115,7 @@ function createMedia(tweet, imgFileName, midiFileName, waveFileName, videoFileNa
 }
 
 function deleteWav(waveFileName, cb) {
-  console.log('Wav file has been deleted');
+  console.log("Wav file has been deleted");
   var command = `rm ${waveFileName}`;
   child_process.exec(command, {}, function(err, stdout, stderr) {
     if (err) {
@@ -127,17 +127,13 @@ function deleteWav(waveFileName, cb) {
 }
 
 function postStatus(params) {
-  bot.post(
-    "statuses/update",
-    params,
-    function (err, data, response) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(`${data}`);
-      }
+  bot.post("statuses/update", params, function(err, data, response) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(`${data}`);
     }
-  );
+  });
 }
 
 function uploadMedia(tweet, videoFileName) {
@@ -162,19 +158,19 @@ function uploadMedia(tweet, videoFileName) {
   );
 }
 
-console.log('About to stream!');
+console.log("About to stream!");
 
 var stream = bot.stream("statuses/filter", { track: botUserName });
 
-stream.on('connecting', function(response){
-  console.log('connecting...');
+stream.on("connecting", function(response) {
+  console.log("connecting...");
 });
 
-stream.on('connected', function(response){
-  console.log('connected!');
+stream.on("connected", function(response) {
+  console.log("connected!");
 });
 
-stream.on('error', function(err){
+stream.on("error", function(err) {
   console.log(err);
 });
 
