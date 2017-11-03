@@ -23,8 +23,8 @@ Tabletop.init({
   key: spreadsheetUrl,
   callback: function(data, tabletop){
     data.forEach(function(row){
-      var status = `${row.URL} is a useful resource for ${row.Subject}`;
-      var allowPost = false;
+      var status = `${row.URL} is a useful resource for ${row.Subject} #javascript #coding`;
+      var allowPost = true;
       console.log(status);
       if(allowPost === true) {
         bot.post(
